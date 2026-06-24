@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>先進的窓リノベ2026 補助金適合チェック｜ウェルスハシモト</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Meiryo', sans-serif; background: #f5f5f3; color: #1a1a1a; min-height: 100vh; }
@@ -18,7 +19,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Meiryo'
 .step { display: none; }
 .step.active { display: block; }
 .q-label { font-size: 15px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
-.q-sub { font-size: 12px; color: #888; margin-bottom: 14px; }
+.q-sub { font-size: 12px; color: #888; margin-bottom: 14px; line-height: 1.6; }
 .opts { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.5rem; }
 .opt { border: 1px solid #ddd; border-radius: 8px; padding: 10px 16px; font-size: 14px; color: #333; background: #fff; cursor: pointer; transition: all 0.15s; text-align: left; }
 .opt:hover { border-color: #185FA5; color: #185FA5; }
@@ -39,23 +40,32 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Meiryo'
 .score-label { font-size: 13px; color: #888; margin-top: 8px; }
 .result-title { text-align: center; font-size: 18px; font-weight: 700; margin-bottom: 6px; }
 .result-desc { text-align: center; font-size: 13px; color: #555; margin-bottom: 1.5rem; line-height: 1.7; }
-.reasons { background: #f9f9f7; border-radius: 12px; padding: 14px 16px; margin-bottom: 1.5rem; border: 1px solid #eee; }
+.reasons { background: #f9f9f7; border-radius: 12px; padding: 14px 16px; margin-bottom: 1rem; border: 1px solid #eee; }
 .reasons h3 { font-size: 11px; font-weight: 600; color: #999; margin-bottom: 10px; letter-spacing: 0.05em; }
 .reason-item { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; font-size: 13px; color: #333; line-height: 1.5; }
 .reason-item:last-child { margin-bottom: 0; }
 .ri-icon { font-size: 15px; margin-top: 1px; flex-shrink: 0; }
 .alert { border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-bottom: 10px; line-height: 1.5; }
 .alert-warn { background: #FAEEDA; color: #633806; border: 1px solid #FAC775; }
-.cta-block { display: flex; flex-direction: column; gap: 10px; margin-top: 1.5rem; }
-.cta-call { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 15px; border-radius: 8px; background: #185FA5; color: #fff; font-size: 15px; font-weight: 700; border: none; cursor: pointer; text-decoration: none; }
-.cta-fax { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 13px; border-radius: 8px; background: #fff; color: #333; font-size: 14px; border: 1px solid #ccc; cursor: pointer; }
+.form-block { background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; padding: 16px; margin: 1.2rem 0; }
+.form-block h3 { font-size: 13px; font-weight: 600; color: #333; margin-bottom: 12px; }
+.form-row { margin-bottom: 10px; }
+.form-row label { font-size: 12px; color: #666; display: block; margin-bottom: 4px; }
+.form-row input { width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; color: #1a1a1a; background: #fafafa; }
+.form-row input:focus { outline: none; border-color: #185FA5; background: #fff; }
+.btn-send { width: 100%; padding: 13px; border-radius: 8px; border: none; background: #185FA5; color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 4px; transition: opacity 0.15s; }
+.btn-send:hover { opacity: 0.88; }
+.btn-send:disabled { opacity: 0.5; cursor: not-allowed; }
+.divider { text-align: center; font-size: 12px; color: #bbb; margin: 1rem 0; }
+.cta-phone { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; border-radius: 8px; background: #f0f7ff; border: 1px solid #b5d4f4; color: #0C447C; font-size: 15px; font-weight: 700; text-decoration: none; }
+.cta-phone .ph-num { font-size: 18px; letter-spacing: 0.05em; }
+.send-success { background: #EAF3DE; border: 1px solid #C0DD97; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #27500A; text-align: center; display: none; margin-top: 8px; }
 .cta-restart { text-align: center; font-size: 12px; color: #aaa; margin-top: 14px; cursor: pointer; text-decoration: underline; }
-.company { text-align: center; font-size: 11px; color: #bbb; margin-top: 1.5rem; }
+.company { text-align: center; font-size: 11px; color: #bbb; margin-top: 1.5rem; line-height: 1.8; }
 </style>
 </head>
 <body>
 <div class="app">
-
   <div class="header">
     <div class="badge">無料 簡易診断</div>
     <h1>先進的窓リノベ2026<br>補助金 適合チェック</h1>
@@ -70,25 +80,25 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Meiryo'
       <p class="q-label">Q1. 建物の用途を教えてください</p>
       <p class="q-sub">複数ある場合は、メインの用途を選択してください</p>
       <div class="opts" id="s1">
-        <button class="opt card" data-val="clinic" onclick="sel(this,'s1')">
-          <i class="ti ti-stethoscope ci"></i>
-          <span><span class="ct">クリニック・医院</span><span class="cs">個人病院・歯科・接骨院など</span></span>
+        <button class="opt card" data-val="always" onclick="sel(this,'s1')">
+          <i class="ti ti-building-hospital ci"></i>
+          <span><span class="ct">診療所・保育園・老人ホームなど</span><span class="cs">幼稚園・図書館・神社・銭湯・交番含む</span></span>
         </button>
-        <button class="opt card" data-val="salon" onclick="sel(this,'s1')">
+        <button class="opt card" data-val="store" onclick="sel(this,'s1')">
           <i class="ti ti-scissors ci"></i>
-          <span><span class="ct">美容室・ヘアサロン</span><span class="cs">理容室含む</span></span>
+          <span><span class="ct">店舗（独立した店舗建物）</span><span class="cs">美容院・食堂・学習塾・日用品店など</span></span>
         </button>
-        <button class="opt card" data-val="animal" onclick="sel(this,'s1')">
-          <i class="ti ti-paw ci"></i>
-          <span><span class="ct">動物病院・ペットホテル</span><span class="cs">トリミングサロン含む</span></span>
-        </button>
-        <button class="opt card" data-val="office" onclick="sel(this,'s1')">
-          <i class="ti ti-building ci"></i>
-          <span><span class="ct">事務所・その他店舗</span><span class="cs">飲食・小売・保育園など</span></span>
+        <button class="opt card" data-val="mixed" onclick="sel(this,'s1')">
+          <i class="ti ti-building-store ci"></i>
+          <span><span class="ct">兼用住宅の店舗部分</span><span class="cs">1階店舗・2階住居など（店舗兼用住宅）</span></span>
         </button>
         <button class="opt card" data-val="housing" onclick="sel(this,'s1')">
           <i class="ti ti-home ci"></i>
-          <span><span class="ct">住宅・店舗兼用住宅</span><span class="cs">店舗兼用の場合はご相談ください</span></span>
+          <span><span class="ct">純粋な住宅</span><span class="cs">一般住宅・マンションなど</span></span>
+        </button>
+        <button class="opt card" data-val="other" onclick="sel(this,'s1')">
+          <i class="ti ti-question-mark ci"></i>
+          <span><span class="ct">よくわからない</span><span class="cs">ご相談ください</span></span>
         </button>
       </div>
       <div class="nav"><button class="btn-next" onclick="next()">次へ <i class="ti ti-arrow-right"></i></button></div>
@@ -107,13 +117,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Meiryo'
       </div>
     </div>
 
-    <div class="step" data-step="3">
-      <p class="q-label">Q3. 建物の延床面積はどのくらいですか？</p>
-      <p class="q-sub">補助上限額に関係します（240㎡超で最大1,000万円）</p>
-      <div class="opts" id="s3">
-        <button class="opt" data-val="over240" onclick="sel(this,'s3')">240㎡超（大型・テナントビル等）</button>
-        <button class="opt" data-val="under240" onclick="sel(this,'s3')">240㎡以下（中小規模）</button>
-        <button class="opt" data-val="unknown" onclick="sel(this,'s3')">わからない</button>
+    <div class="step" data-step="3" id="step-zone" style="display:none">
+      <p class="q-label">Q3. 建物の用途地域を教えてください</p>
+      <p class="q-sub">店舗部分・兼用住宅の店舗部分は「第一種・第二種低層住居専用地域」のみ補助対象です。住宅部分は別途、住宅向け補助制度の対象となります。</p>
+      <div class="opts" id="s3z">
+        <button class="opt" data-val="low_yes" onclick="sel(this,'s3z')">第一種・第二種低層住居専用地域だと思う</button>
+        <button class="opt" data-val="low_no" onclick="sel(this,'s3z')">それ以外の地域だと思う</button>
+        <button class="opt" data-val="unknown" onclick="sel(this,'s3z')">わからない</button>
       </div>
       <div class="nav">
         <button class="btn-back" onclick="back()"><i class="ti ti-arrow-left"></i></button>
@@ -122,15 +132,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Meiryo'
     </div>
 
     <div class="step" data-step="4">
-      <p class="q-label">Q4. 現在の窓の状況を教えてください</p>
-      <p class="q-sub">当てはまるものをすべて選んでください（複数OK）</p>
-      <div class="opts" id="s4" data-multi="true">
-        <button class="opt" data-val="single" onclick="sel(this,'s4')">単板ガラス（1枚ガラス）が多い</button>
-        <button class="opt" data-val="cold" onclick="sel(this,'s4')">冬に窓際が寒い・結露がひどい</button>
-        <button class="opt" data-val="hot" onclick="sel(this,'s4')">夏に直射日光が暑い・まぶしい</button>
-        <button class="opt" data-val="noise" onclick="sel(this,'s4')">外の音や騒音が気になる</button>
-        <button class="opt" data-val="cost" onclick="sel(this,'s4')">光熱費（電気代）が高い</button>
-        <button class="opt" data-val="none" onclick="sel(this,'s4')">特に困っていない</button>
+      <p class="q-label" id="q-size-label">Q3. 建物の延床面積はどのくらいですか？</p>
+      <p class="q-sub">補助上限額に関係します（240㎡超で最大1,000万円）</p>
+      <div class="opts" id="s4">
+        <button class="opt" data-val="over240" onclick="sel(this,'s4')">240㎡超（大型・テナントビル等）</button>
+        <button class="opt" data-val="under240" onclick="sel(this,'s4')">240㎡以下（中小規模）</button>
+        <button class="opt" data-val="unknown" onclick="sel(this,'s4')">わからない</button>
       </div>
       <div class="nav">
         <button class="btn-back" onclick="back()"><i class="ti ti-arrow-left"></i></button>
@@ -139,13 +146,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Meiryo'
     </div>
 
     <div class="step" data-step="5">
-      <p class="q-label">Q5. 工事の実施時期はお考えですか？</p>
-      <p class="q-sub">補助予算は先着順です。お早めのご検討をおすすめします</p>
-      <div class="opts" id="s5">
-        <button class="opt" data-val="soon" onclick="sel(this,'s5')">できるだけ早く（今すぐ検討したい）</button>
-        <button class="opt" data-val="half" onclick="sel(this,'s5')">半年以内には動きたい</button>
-        <button class="opt" data-val="year" onclick="sel(this,'s5')">1年以内を目安に考えたい</button>
-        <button class="opt" data-val="thinking" onclick="sel(this,'s5')">まだ検討段階</button>
+      <p class="q-label" id="q-window-label">Q4. 現在の窓の状況を教えてください</p>
+      <p class="q-sub">当てはまるものをすべて選んでください（複数OK）</p>
+      <div class="opts" id="s5" data-multi="true">
+        <button class="opt" data-val="single" onclick="sel(this,'s5')">単板ガラス（1枚ガラス）が多い</button>
+        <button class="opt" data-val="cold" onclick="sel(this,'s5')">冬に窓際が寒い・結露がひどい</button>
+        <button class="opt" data-val="hot" onclick="sel(this,'s5')">夏に直射日光が暑い・まぶしい</button>
+        <button class="opt" data-val="noise" onclick="sel(this,'s5')">外の音や騒音が気になる</button>
+        <button class="opt" data-val="cost" onclick="sel(this,'s5')">光熱費（電気代）が高い</button>
+        <button class="opt" data-val="none" onclick="sel(this,'s5')">特に困っていない</button>
       </div>
       <div class="nav">
         <button class="btn-back" onclick="back()"><i class="ti ti-arrow-left"></i></button>
@@ -154,11 +163,26 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Meiryo'
     </div>
 
     <div class="step" data-step="6">
-      <p class="q-label">Q6. 補助金申請のサポートについて</p>
-      <p class="q-sub">当社が登録事業者として申請手続きを全て代行します</p>
+      <p class="q-label" id="q-timing-label">Q5. 工事の実施時期はお考えですか？</p>
+      <p class="q-sub">補助予算は先着順です。お早めのご検討をおすすめします</p>
       <div class="opts" id="s6">
-        <button class="opt" data-val="want" onclick="sel(this,'s6')">申請サポートがあれば検討したい</button>
-        <button class="opt" data-val="unsure" onclick="sel(this,'s6')">申請の仕組みがよくわからない</button>
+        <button class="opt" data-val="soon" onclick="sel(this,'s6')">できるだけ早く（今すぐ検討したい）</button>
+        <button class="opt" data-val="half" onclick="sel(this,'s6')">半年以内には動きたい</button>
+        <button class="opt" data-val="year" onclick="sel(this,'s6')">1年以内を目安に考えたい</button>
+        <button class="opt" data-val="thinking" onclick="sel(this,'s6')">まだ検討段階</button>
+      </div>
+      <div class="nav">
+        <button class="btn-back" onclick="back()"><i class="ti ti-arrow-left"></i></button>
+        <button class="btn-next" onclick="next()">次へ <i class="ti ti-arrow-right"></i></button>
+      </div>
+    </div>
+
+    <div class="step" data-step="7">
+      <p class="q-label" id="q-support-label">Q6. 補助金申請のサポートについて</p>
+      <p class="q-sub">当社が登録事業者として申請手続きを全て代行します</p>
+      <div class="opts" id="s7">
+        <button class="opt" data-val="want" onclick="sel(this,'s7')">申請サポートがあれば検討したい</button>
+        <button class="opt" data-val="unsure" onclick="sel(this,'s7')">申請の仕組みがよくわからない</button>
       </div>
       <div class="nav">
         <button class="btn-back" onclick="back()"><i class="ti ti-arrow-left"></i></button>
@@ -182,57 +206,95 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Meiryo'
       <div id="reasons-list"></div>
     </div>
     <div id="alert-area"></div>
-    <div class="cta-block">
-      <a class="cta-call" href="tel:0120-3-84610">
-        <i class="ti ti-phone"></i> 無料相談のお電話はこちら　0120-3-84610
-      </a>
-      <button class="cta-fax" onclick="alert('FAX番号：0233-43-4108\n診断シートをFAXいただくか、お電話でもご相談承ります。')">
-        <i class="ti ti-file-text"></i> 無料診断シートをFAXで受け取る　0233-43-4108
+
+    <div class="form-block">
+      <h3><i class="ti ti-mail"></i> 診断結果をメールで受け取る</h3>
+      <div class="form-row">
+        <label>お名前 *</label>
+        <input type="text" id="inp-name" placeholder="山田 太郎">
+      </div>
+      <div class="form-row">
+        <label>メールアドレス *</label>
+        <input type="email" id="inp-email" placeholder="example@mail.com">
+      </div>
+      <div class="form-row">
+        <label>電話番号（任意）</label>
+        <input type="tel" id="inp-phone" placeholder="090-0000-0000">
+      </div>
+      <button class="btn-send" id="btn-send" onclick="sendMail()">
+        <i class="ti ti-send"></i> 診断結果を送信する
       </button>
+      <div class="send-success" id="send-success">
+        <i class="ti ti-circle-check"></i> 送信完了！メールをご確認ください。担当者よりご連絡いたします。
+      </div>
     </div>
+
+    <div class="divider">― または ―</div>
+
+    <a class="cta-phone" href="tel:0120-3-84610">
+      <i class="ti ti-phone"></i>
+      <span>今すぐ無料相談<br><span class="ph-num">0120-3-84610</span></span>
+    </a>
+
+    <p style="text-align:center;font-size:11px;color:#aaa;margin-top:6px;">※PCからはお電話での発信はできません。スマホからご利用ください。</p>
+
     <p class="cta-restart" onclick="restart()">最初からやり直す</p>
-    <p class="company">ウェルスハシモト｜先進的窓リノベ2026 登録施工事業者</p>
+    <p class="company">ウェルスハシモト｜先進的窓リノベ2026 登録施工事業者<br>山形県最上郡最上町向町279-13　TEL 0233-43-4103</p>
   </div>
 
 </div>
 <script>
+emailjs.init('S5GtO9-r6F5RYSoje');
+
 const answers = {};
 let currentStep = 1;
-const totalSteps = 6;
+const totalSteps = 7;
+let resultData = {};
+
+function isHousing() { return answers.s1 === 'housing'; }
+function isMixed() { return answers.s1 === 'mixed' || answers.s1 === 'store'; }
+
+function getStepEl(n) { return document.querySelector('.step[data-step="' + n + '"]'); }
 
 function sel(btn, groupId) {
-  const group = document.getElementById(groupId);
-  const isMulti = group.dataset.multi === 'true';
+  var group = document.getElementById(groupId);
+  var isMulti = group.dataset.multi === 'true';
   if (!isMulti) {
-    group.querySelectorAll('.opt').forEach(b => b.classList.remove('sel'));
+    group.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('sel'); });
   } else {
     if (btn.dataset.val === 'none') {
-      group.querySelectorAll('.opt').forEach(b => b.classList.remove('sel'));
+      group.querySelectorAll('.opt').forEach(function(b){ b.classList.remove('sel'); });
     } else {
-      const noneBtn = group.querySelector('[data-val="none"]');
-      if (noneBtn) noneBtn.classList.remove('sel');
+      var nb = group.querySelector('[data-val="none"]');
+      if (nb) nb.classList.remove('sel');
     }
   }
   btn.classList.toggle('sel');
-  const selected = [...group.querySelectorAll('.opt.sel')].map(b => b.dataset.val);
+  var selected = Array.from(group.querySelectorAll('.opt.sel')).map(function(b){ return b.dataset.val; });
   answers[groupId] = isMulti ? selected : (selected[0] || null);
 }
 
 function next() {
-  const stepEl = document.querySelector('.step.active');
-  const stepNum = parseInt(stepEl.dataset.step);
-  stepEl.classList.remove('active');
+  var cur = document.querySelector('.step.active');
+  cur.classList.remove('active');
   currentStep++;
-  const nextEl = document.querySelector('.step[data-step="' + currentStep + '"]');
-  if (nextEl) nextEl.classList.add('active');
+  if (currentStep === 3 && !isMixed()) {
+    currentStep++;
+  }
+  var el = getStepEl(currentStep);
+  if (el) el.classList.add('active');
   document.getElementById('pbar').style.width = Math.round((currentStep / (totalSteps + 1)) * 100) + '%';
 }
 
 function back() {
-  const stepEl = document.querySelector('.step.active');
-  stepEl.classList.remove('active');
+  var cur = document.querySelector('.step.active');
+  cur.classList.remove('active');
   currentStep--;
-  document.querySelector('.step[data-step="' + currentStep + '"]').classList.add('active');
+  if (currentStep === 3 && !isMixed()) {
+    currentStep--;
+  }
+  var el = getStepEl(currentStep);
+  if (el) el.classList.add('active');
   document.getElementById('pbar').style.width = Math.round((currentStep / (totalSteps + 1)) * 100) + '%';
 }
 
@@ -241,24 +303,39 @@ function calcResult() {
   document.getElementById('pbar').style.width = '100%';
   document.getElementById('result').classList.add('active');
 
-  let score = 0;
-  const points = [];
-  const warnings = [];
+  var score = 0;
+  var points = [];
+  var warnings = [];
 
-  const biz = answers.s1;
-  const existing = answers.s2;
-  const size = answers.s3;
-  const issues = answers.s4 || [];
-  const timing = answers.s5;
+  var biz = answers.s1;
+  var existing = answers.s2;
+  var zone = answers.s3z;
+  var size = answers.s4;
+  var issues = answers.s5 || [];
+  var timing = answers.s6;
+
+  var bizNames = {always:'診療所・保育園・老人ホームなど', store:'店舗（独立建物）', mixed:'兼用住宅の店舗部分', housing:'純粋な住宅', other:'用途不明'};
 
   if (biz === 'housing') {
-    score += 40;
-    points.push({icon:'ti-check', text:'店舗兼用住宅は条件次第で非住宅部分が対象になる可能性があります'});
-    warnings.push('純粋な住宅は非住宅向け本制度の対象外ですが、別の補助制度もございます。まずはご相談ください。');
-  } else if (['clinic','animal','salon','office'].includes(biz)) {
-    score += 45;
-    const bizNames = {clinic:'クリニック・医院',animal:'動物病院・ペットホテル',salon:'美容室・ヘアサロン',office:'事務所・その他店舗'};
-    points.push({icon:'ti-check', text: bizNames[biz] + 'は非住宅建築物として補助対象になる可能性が高いです'});
+    score += 20;
+    warnings.push('純粋な住宅は本制度（非住宅向け）の対象外です。住宅向けの別補助制度をご案内できますので、お気軽にご相談ください。');
+  } else if (biz === 'always') {
+    score += 50;
+    points.push({icon:'ti-check', text:'診療所・保育園・老人ホームなどは用途地域を問わず補助対象になる可能性が高いです'});
+  } else if (biz === 'store' || biz === 'mixed') {
+    if (zone === 'low_yes') {
+      score += 45;
+      points.push({icon:'ti-check', text:'第一種・第二種低層住居専用地域であれば店舗部分が補助対象になる可能性が高いです（住宅部分は別途住宅向け制度をご案内できます）'});
+    } else if (zone === 'low_no') {
+      score += 25;
+      warnings.push('お住まいの地域では対象外になる場合があります。詳細は無料相談でご確認ください。');
+    } else {
+      score += 35;
+      points.push({icon:'ti-info-circle', text:'用途地域の確認で対象か判断できます。無料相談でお調べします'});
+    }
+  } else {
+    score += 35;
+    points.push({icon:'ti-info-circle', text:'建物の用途・立地を確認することで補助対象か判断できます。まずはご相談ください'});
   }
 
   if (existing === 'yes') {
@@ -277,10 +354,10 @@ function calcResult() {
     points.push({icon:'ti-check', text:'中小規模建物でも1棟100万円を上限に補助が受けられます'});
   } else {
     score += 10;
-    points.push({icon:'ti-ruler', text:'面積を確認することで補助上限額が明確になります。お気軽にご相談ください'});
+    points.push({icon:'ti-ruler', text:'面積を確認することで補助上限額が明確になります'});
   }
 
-  const painCount = issues.filter(function(i){ return ['single','cold','hot','noise','cost'].includes(i); }).length;
+  var painCount = issues.filter(function(i){ return ['single','cold','hot','noise','cost'].includes(i); }).length;
   if (painCount >= 3) {
     score += 10;
     points.push({icon:'ti-check', text: painCount + 'つの課題が確認されました。窓断熱リノベで一気に解決できる可能性があります'});
@@ -301,55 +378,133 @@ function calcResult() {
 
   score = Math.max(55, Math.min(97, score));
 
-  const circle = document.getElementById('score-circle');
-  const numEl = document.getElementById('score-num');
-  const titleEl = document.getElementById('result-title');
-  const descEl = document.getElementById('result-desc');
-
-  numEl.textContent = score;
-
+  var titleText, descText, bgColor;
   if (score >= 75) {
-    circle.style.background = '#0F6E56';
-    titleEl.textContent = '補助金の活用可能性が高いです！';
-    descEl.textContent = '現状の条件から、先進的窓リノベ2026の対象になる可能性が高いと判断されます。まずは無料の現地確認からお気軽にご相談ください。';
+    bgColor = '#0F6E56';
+    titleText = '補助金の活用可能性が高いです！';
+    descText = '現状の条件から、先進的窓リノベ2026の対象になる可能性が高いと判断されます。まずは無料の現地確認からお気軽にご相談ください。';
   } else if (score >= 55) {
-    circle.style.background = '#185FA5';
-    titleEl.textContent = '補助金が使える可能性があります';
-    descEl.textContent = '詳細を確認することで補助対象になるケースが多くあります。専門スタッフが無料でお調べしますので、ぜひ一度ご相談ください。';
+    bgColor = '#185FA5';
+    titleText = '補助金が使える可能性があります';
+    descText = '詳細を確認することで補助対象になるケースが多くあります。専門スタッフが無料でお調べしますので、ぜひ一度ご相談ください。';
   } else {
-    circle.style.background = '#BA7517';
-    titleEl.textContent = '詳細の確認でご案内できます';
-    descEl.textContent = 'いくつか確認が必要な点がありますが、現地調査や詳細ヒアリングで解決策が見つかることがほとんどです。まずはお気軽にご相談ください。';
+    bgColor = '#BA7517';
+    titleText = '詳細の確認でご案内できます';
+    descText = 'いくつか確認が必要な点がありますが、現地調査や詳細ヒアリングで解決策が見つかることがほとんどです。まずはお気軽にご相談ください。';
   }
 
-  const list = document.getElementById('reasons-list');
+  document.getElementById('score-circle').style.background = bgColor;
+  document.getElementById('score-num').textContent = score;
+  document.getElementById('result-title').textContent = titleText;
+  document.getElementById('result-desc').textContent = descText;
+
+  var list = document.getElementById('reasons-list');
   list.innerHTML = '';
   points.slice(0, 4).forEach(function(p) {
-    const div = document.createElement('div');
+    var div = document.createElement('div');
     div.className = 'reason-item';
     div.innerHTML = '<i class="ti ' + p.icon + ' ri-icon" style="color:' + (p.icon==='ti-check'?'#0F6E56':'#999') + '"></i><span>' + p.text + '</span>';
     list.appendChild(div);
   });
 
-  const alertArea = document.getElementById('alert-area');
+  var alertArea = document.getElementById('alert-area');
   alertArea.innerHTML = '';
   warnings.forEach(function(w) {
-    const div = document.createElement('div');
+    var div = document.createElement('div');
     div.className = 'alert alert-warn';
     div.innerHTML = '<i class="ti ti-alert-triangle"></i> ' + w;
     alertArea.appendChild(div);
   });
+
+  var pointsText = points.map(function(p){ return '・' + p.text; }).join('\n');
+  var bizLabel = bizNames[biz] || '不明';
+  var issueLabels = {single:'単板ガラスが多い', cold:'冬に寒い・結露', hot:'夏に暑い・まぶしい', noise:'騒音が気になる', cost:'光熱費が高い', none:'特になし'};
+  var issueText = issues.length ? issues.map(function(i){ return issueLabels[i]||i; }).join('、') : '特になし';
+  var timingLabels = {soon:'今すぐ検討', half:'半年以内', year:'1年以内', thinking:'まだ検討段階'};
+
+  resultData = {
+    score: score,
+    result_type: titleText,
+    result_detail: descText,
+    biz: bizLabel,
+    size: size === 'over240' ? '240㎡超' : size === 'under240' ? '240㎡以下' : 'わからない',
+    issues: issueText,
+    timing: timingLabels[timing] || '未回答',
+    points: pointsText,
+    warnings: warnings.join(' / ') || 'なし'
+  };
+}
+
+function sendMail() {
+  var name = document.getElementById('inp-name').value.trim();
+  var email = document.getElementById('inp-email').value.trim();
+  var phone = document.getElementById('inp-phone').value.trim() || '未記入';
+
+  if (!name || !email) {
+    alert('お名前とメールアドレスは必須です。');
+    return;
+  }
+
+  var btn = document.getElementById('btn-send');
+  btn.disabled = true;
+  btn.textContent = '送信中...';
+
+  var summary = '建物用途：' + resultData.biz +
+    '\n延床面積：' + resultData.size +
+    '\n窓の課題：' + resultData.issues +
+    '\n実施時期：' + resultData.timing +
+    '\n電話番号：' + phone;
+
+  var params = {
+    name: name,
+    email: email,
+    to_email: email,
+    result_type: resultData.score + '% ／ ' + resultData.result_type,
+    result_detail: resultData.result_detail,
+    answers_summary: summary
+  };
+
+  emailjs.send('service_t789gci', 'template_ielvnve', params)
+    .then(function() {
+      var params2 = {
+        name: name + '様（窓リノベ診断）',
+        email: 'hero.hasshy@gmail.com',
+        to_email: 'hero.hasshy@gmail.com',
+        result_type: resultData.score + '% ／ ' + resultData.result_type,
+        result_detail: resultData.result_detail,
+        answers_summary: summary
+      };
+      return emailjs.send('service_t789gci', 'template_ielvnve', params2);
+    })
+    .then(function() {
+      document.getElementById('send-success').style.display = 'block';
+      btn.style.display = 'none';
+    })
+    .catch(function(err) {
+      alert('送信に失敗しました。お電話でご連絡ください。');
+      btn.disabled = false;
+      btn.innerHTML = '<i class="ti ti-send"></i> 診断結果を送信する';
+      console.error(err);
+    });
 }
 
 function restart() {
   for (var k in answers) delete answers[k];
+  resultData = {};
   currentStep = 1;
   document.getElementById('result').classList.remove('active');
   document.getElementById('steps').style.display = 'block';
   document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
-  document.querySelector('.step[data-step="1"]').classList.add('active');
+  getStepEl(1).classList.add('active');
   document.getElementById('pbar').style.width = '14%';
   document.querySelectorAll('.opt').forEach(function(o){ o.classList.remove('sel'); });
+  document.getElementById('inp-name').value = '';
+  document.getElementById('inp-email').value = '';
+  document.getElementById('inp-phone').value = '';
+  document.getElementById('send-success').style.display = 'none';
+  document.getElementById('btn-send').style.display = 'block';
+  document.getElementById('btn-send').disabled = false;
+  document.getElementById('btn-send').innerHTML = '<i class="ti ti-send"></i> 診断結果を送信する';
 }
 </script>
 </body>
