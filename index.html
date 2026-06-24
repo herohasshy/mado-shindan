@@ -117,7 +117,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Meiryo'
       </div>
     </div>
 
-    <div class="step" data-step="3" id="step-zone" style="display:none">
+    <div class="step" data-step="3" id="step-zone">
       <p class="q-label">Q3. 建物の用途地域を教えてください</p>
       <p class="q-sub">店舗部分・兼用住宅の店舗部分は「第一種・第二種低層住居専用地域」のみ補助対象です。住宅部分は別途、住宅向け補助制度の対象となります。</p>
       <div class="opts" id="s3z">
@@ -282,6 +282,7 @@ function next() {
     currentStep++;
   }
   var el = getStepEl(currentStep);
+  if (!el) { currentStep++; el = getStepEl(currentStep); }
   if (el) el.classList.add('active');
   document.getElementById('pbar').style.width = Math.round((currentStep / (totalSteps + 1)) * 100) + '%';
 }
